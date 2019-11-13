@@ -1,0 +1,21 @@
+==20043== Memcheck, a memory error detector
+==20043== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==20043== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==20043== Command: ./mysh -c pwd\ |\ (ls\ -alh\ /)\ |\ (pwd|pwd)\ |\ {pwd;pwd}\ |\ {{pwd|pwd};pwd}\ |\ 2\>&1\ \>/dev/null\ ls\ .\ fdsfsa\ |\ \>a\ pwd\ |\ \>\>b\ pwd\ |\ (pwd\ &)\ |\ cd\ /\ |\ exit\ 31
+==20043== Parent PID: 19955
+==20043== 
+==20043== 
+==20043== HEAP SUMMARY:
+==20043==     in use at exit: 8 bytes in 1 blocks
+==20043==   total heap usage: 107 allocs, 106 frees, 4,652 bytes allocated
+==20043== 
+==20043== LEAK SUMMARY:
+==20043==    definitely lost: 0 bytes in 0 blocks
+==20043==    indirectly lost: 0 bytes in 0 blocks
+==20043==      possibly lost: 0 bytes in 0 blocks
+==20043==    still reachable: 8 bytes in 1 blocks
+==20043==         suppressed: 0 bytes in 0 blocks
+==20043== Rerun with --leak-check=full to see details of leaked memory
+==20043== 
+==20043== For counts of detected and suppressed errors, rerun with: -v
+==20043== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
