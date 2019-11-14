@@ -8,17 +8,23 @@
 #include "parser/ast.h"
 #include "shell.h"
 
-
-void initialize(void)
-{
-  /* This code will be called once at startup */
-  if (prompt)
-      prompt = "vush$ ";
-}
+#define TRUE 1
+#define FALSE 0
 
 void handle_cmd(node_t*);
 
 void handle_seq(node_t*);
+
+void handle_pipe(node_t*);
+
+void signal_handler(){ return; }
+
+void initialize(void){
+  signal(SIGINT, signal_handler);
+
+  if (prompt)
+      prompt = "vush$ ";
+}
 
 void run_command(node_t* node)
 {
@@ -28,7 +34,7 @@ void run_command(node_t* node)
   if (prompt)
       prompt = "vush$ ";
 
-  switch (node->type) {
+  switch (node->type){
     case NODE_COMMAND:
       handle_cmd(node);
       break;
@@ -36,6 +42,7 @@ void run_command(node_t* node)
       handle_seq(node);
       break;
     case NODE_PIPE:
+      handle_pipe(node);
       break;
     case NODE_DETACH:
       break;
@@ -51,21 +58,21 @@ _Bool handle_builtin_cmd(node_t* n){
     exit(42);
   } else if (strcmp(n->command.program, "cd") == 0) {
     chdir(n->command.argv[1]);
-    return 1;
+    return TRUE;
   }
-  return 0;
+  return FALSE;
 }
 
-void handle_cmd(node_t* n) {
+void handle_cmd(node_t* n){
   if (handle_builtin_cmd(n)) { return; }
 
   int status;
   pid_t proc_id = fork();
-  if (proc_id == -1) {
-      printf("Failed to fork off :(");
-      return;
-  } else if (proc_id == 0) {
-      execvp(n->command.program, n->command.argv);
+  if (proc_id == 0) {
+      if (execvp(n->command.program, n->command.argv) == -1){
+        perror("No such file or directory");
+        return;
+      }
       exit(0);
   } else do {
      if ((proc_id = waitpid(proc_id, &status, WNOHANG)) == 0){
@@ -74,12 +81,18 @@ void handle_cmd(node_t* n) {
   } while (proc_id == 0);
 }
 
-void handle_seq(node_t* n) {
+void handle_seq(node_t* n){
   handle_cmd(n->sequence.first);
 
   if (n->sequence.second->type == NODE_COMMAND) {
     handle_cmd(n->sequence.second);
   } else {
     handle_seq(n->sequence.second);
+  }
+}
+
+void handle_pipe(node_t* n){
+  for (int i = 0; i < n->; i++) {
+    /* code */
   }
 }
