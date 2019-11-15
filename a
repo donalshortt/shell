@@ -4,7 +4,7 @@
 4	/etc/./binfmt.d
 4	/etc/./rc0.d
 8	/etc/./insserv.conf.d
-48	/etc/./update-motd.d
+52	/etc/./update-motd.d
 44	/etc/./modprobe.d
 72	/etc/./speech-dispatcher/modules
 8	/etc/./speech-dispatcher/clients
@@ -330,4 +330,4 @@ du: cannot read directory '/etc/./polkit-1/localauthority': Permission denied
 12	/etc/./groff
 8	/etc/./cracklib
 84	/etc/./grub.d
-12556	/etc/.
+12560	/etc/.

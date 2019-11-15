@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <linux/limits.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -91,8 +92,36 @@ void handle_seq(node_t* n){
   }
 }
 
-void handle_pipe(node_t* n){
-  for (int i = 0; i < n->; i++) {
-    /* code */
+char* argvec_concat(char** vec, int vec_size){
+  char* output[1024];
+
+  for (size_t i = 0; i < vec_size; i++) {
+    strcat(output, vec[i])
   }
+
+  return output;
+}
+
+void handle_pipe(node_t* n){
+  FILE* fpin;
+  FILE* fpout;
+
+  for (int i = 0; i < n->pipe.n_parts; i++) {
+    char* argvec = argvec_concat(n->pipe.parts[i]->command.argv, n->pipe.parts[i]->command.argc);
+    if(n->pipe.parts[i]->type == NODE_COMMAND) {
+      fpin = popen(argvec, "w");
+    }
+  }
+
+  // FILE* fpin = popen(n->pipe.parts[0]->command.program, "w");
+  // FILE* fpout1 = popen(n->pipe.parts[0]->command.program, "r");
+  // FILE* fpin2 = popen(n->pipe.parts[1]->command.program, "w");
+  // fputs(n->pipe.parts[0]->command.argv[1], fpin1);
+  // splice(fpout1, NULL, fpin2, NULL);
+  // pclose(fpin1);
+  // pclose(fpin2);
+  // pclose(fpout1);
+  printf("PENIS\n");
+  printf(n->pipe.parts[0]->command.argv);
+  printf("\n");
 }
