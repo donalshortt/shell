@@ -1,48 +1,84 @@
-==26846== Memcheck, a memory error detector
-==26846== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==26846== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
-==26846== Command: ./mysh -c pwd\ |\ (ls\ -alh\ /)\ |\ (pwd|pwd)\ |\ {pwd;pwd}\ |\ {{pwd|pwd};pwd}\ |\ 2\>&1\ \>/dev/null\ ls\ .\ fdsfsa\ |\ \>a\ pwd\ |\ \>\>b\ pwd\ |\ (pwd\ &)\ |\ cd\ /\ |\ exit\ 31
-==26846== Parent PID: 26731
-==26846== 
-==26846== Invalid read of size 1
-==26846==    at 0x4C32CF2: strlen (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
-==26846==    by 0x5104204: fputs (iofputs.c:33)
-==26846==    by 0x10A034: handle_pipe (shell.c:103)
-==26846==    by 0x109E1A: run_command (shell.c:46)
-==26846==    by 0x10B4B0: yy_reduce (parser.y:26)
-==26846==    by 0x10BF22: Parse (parser.c:1078)
-==26846==    by 0x109B74: handle_command (front.c:51)
-==26846==    by 0x109C16: main (front.c:87)
-==26846==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==26846== 
-==26846== 
-==26846== Process terminating with default action of signal 11 (SIGSEGV)
-==26846==  Access not within mapped region at address 0x0
-==26846==    at 0x4C32CF2: strlen (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
-==26846==    by 0x5104204: fputs (iofputs.c:33)
-==26846==    by 0x10A034: handle_pipe (shell.c:103)
-==26846==    by 0x109E1A: run_command (shell.c:46)
-==26846==    by 0x10B4B0: yy_reduce (parser.y:26)
-==26846==    by 0x10BF22: Parse (parser.c:1078)
-==26846==    by 0x109B74: handle_command (front.c:51)
-==26846==    by 0x109C16: main (front.c:87)
-==26846==  If you believe this happened as a result of a stack
-==26846==  overflow in your program's main thread (unlikely but
-==26846==  possible), you can try to increase the size of the
-==26846==  main thread stack using the --main-stacksize= flag.
-==26846==  The main thread stack size used in this run was 8388608.
-==26846== 
-==26846== HEAP SUMMARY:
-==26846==     in use at exit: 4,872 bytes in 93 blocks
-==26846==   total heap usage: 110 allocs, 17 frees, 5,420 bytes allocated
-==26846== 
-==26846== LEAK SUMMARY:
-==26846==    definitely lost: 0 bytes in 0 blocks
-==26846==    indirectly lost: 0 bytes in 0 blocks
-==26846==      possibly lost: 0 bytes in 0 blocks
-==26846==    still reachable: 4,872 bytes in 93 blocks
-==26846==         suppressed: 0 bytes in 0 blocks
-==26846== Rerun with --leak-check=full to see details of leaked memory
-==26846== 
-==26846== For counts of detected and suppressed errors, rerun with: -v
-==26846== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==22832== Memcheck, a memory error detector
+==22832== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==22832== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==22832== Command: ./mysh -c pwd\ |\ (ls\ -alh\ /)\ |\ (pwd|pwd)\ |\ {pwd;pwd}\ |\ {{pwd|pwd};pwd}\ |\ 2\>&1\ \>/dev/null\ ls\ .\ fdsfsa\ |\ \>a\ pwd\ |\ \>\>b\ pwd\ |\ (pwd\ &)\ |\ cd\ /\ |\ exit\ 31
+==22832== Parent PID: 22732
+==22832== 
+==22834== Syscall param execve(argv[i]) points to uninitialised byte(s)
+==22834==    at 0x5169E37: execve (syscall-template.S:78)
+==22834==    by 0x516A287: execl (execl.c:55)
+==22834==    by 0x5105912: _IO_proc_open@@GLIBC_2.2.5 (iopopen.c:148)
+==22834==    by 0x5105987: popen@@GLIBC_2.2.5 (iopopen.c:206)
+==22834==    by 0x109FAB: handle_pipe (shell.c:121)
+==22834==    by 0x109D7A: run_command (shell.c:46)
+==22834==    by 0x10B418: yy_reduce (parser.y:26)
+==22834==    by 0x10BE8A: Parse (parser.c:1078)
+==22834==    by 0x109AD4: handle_command (front.c:51)
+==22834==    by 0x109B76: main (front.c:87)
+==22834==  Address 0x56a2f80 is 0 bytes inside a block of size 100,000 alloc'd
+==22834==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22834==    by 0x109F19: argvec_concat (shell.c:102)
+==22834==    by 0x109F79: handle_pipe (shell.c:119)
+==22834==    by 0x109D7A: run_command (shell.c:46)
+==22834==    by 0x10B418: yy_reduce (parser.y:26)
+==22834==    by 0x10BE8A: Parse (parser.c:1078)
+==22834==    by 0x109AD4: handle_command (front.c:51)
+==22834==    by 0x109B76: main (front.c:87)
+==22834== 
+==22835== Syscall param execve(argv[i]) points to uninitialised byte(s)
+==22835==    at 0x5169E37: execve (syscall-template.S:78)
+==22835==    by 0x516A287: execl (execl.c:55)
+==22835==    by 0x5105912: _IO_proc_open@@GLIBC_2.2.5 (iopopen.c:148)
+==22835==    by 0x5105987: popen@@GLIBC_2.2.5 (iopopen.c:206)
+==22835==    by 0x109FAB: handle_pipe (shell.c:121)
+==22835==    by 0x109D7A: run_command (shell.c:46)
+==22835==    by 0x10B418: yy_reduce (parser.y:26)
+==22835==    by 0x10BE8A: Parse (parser.c:1078)
+==22835==    by 0x109AD4: handle_command (front.c:51)
+==22835==    by 0x109B76: main (front.c:87)
+==22835==  Address 0x577eea0 is 0 bytes inside a block of size 100,000 alloc'd
+==22835==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22835==    by 0x109F19: argvec_concat (shell.c:102)
+==22835==    by 0x109F79: handle_pipe (shell.c:119)
+==22835==    by 0x109D7A: run_command (shell.c:46)
+==22835==    by 0x10B418: yy_reduce (parser.y:26)
+==22835==    by 0x10BE8A: Parse (parser.c:1078)
+==22835==    by 0x109AD4: handle_command (front.c:51)
+==22835==    by 0x109B76: main (front.c:87)
+==22835== 
+==22837== Syscall param execve(argv[i]) points to uninitialised byte(s)
+==22837==    at 0x5169E37: execve (syscall-template.S:78)
+==22837==    by 0x516A287: execl (execl.c:55)
+==22837==    by 0x5105912: _IO_proc_open@@GLIBC_2.2.5 (iopopen.c:148)
+==22837==    by 0x5105987: popen@@GLIBC_2.2.5 (iopopen.c:206)
+==22837==    by 0x109FAB: handle_pipe (shell.c:121)
+==22837==    by 0x109D7A: run_command (shell.c:46)
+==22837==    by 0x10B418: yy_reduce (parser.y:26)
+==22837==    by 0x10BE8A: Parse (parser.c:1078)
+==22837==    by 0x109AD4: handle_command (front.c:51)
+==22837==    by 0x109B76: main (front.c:87)
+==22837==  Address 0x57976c0 is 0 bytes inside a block of size 100,000 alloc'd
+==22837==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22837==    by 0x109F19: argvec_concat (shell.c:102)
+==22837==    by 0x109F79: handle_pipe (shell.c:119)
+==22837==    by 0x109D7A: run_command (shell.c:46)
+==22837==    by 0x10B418: yy_reduce (parser.y:26)
+==22837==    by 0x10BE8A: Parse (parser.c:1078)
+==22837==    by 0x109AD4: handle_command (front.c:51)
+==22837==    by 0x109B76: main (front.c:87)
+==22837== 
+==22832== 
+==22832== HEAP SUMMARY:
+==22832==     in use at exit: 800,008 bytes in 9 blocks
+==22832==   total heap usage: 121 allocs, 112 frees, 1,105,420 bytes allocated
+==22832== 
+==22832== LEAK SUMMARY:
+==22832==    definitely lost: 800,000 bytes in 8 blocks
+==22832==    indirectly lost: 0 bytes in 0 blocks
+==22832==      possibly lost: 0 bytes in 0 blocks
+==22832==    still reachable: 8 bytes in 1 blocks
+==22832==         suppressed: 0 bytes in 0 blocks
+==22832== Rerun with --leak-check=full to see details of leaked memory
+==22832== 
+==22832== For counts of detected and suppressed errors, rerun with: -v
+==22832== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
