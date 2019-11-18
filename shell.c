@@ -92,39 +92,43 @@ void handle_seq(node_t* n){
   }
 }
 
-char* argvec_concat(char** vec, int vec_size){
+char* argvec_concat(char** vec, size_t vec_size){
   int output_len = 0;
+
+  printf("Vec size: %zu\n", vec_size);
 
   // for (int i = 0; i < vec_size; i++) {
   //   output_len = output_len + strlen(vec[i]);
   // }
 
-  char* output = malloc(/*(sizeof(char) * output_len) + vec_size*/100000);
+  char* output = malloc((sizeof(char) * output_len) + 1);
+  printf("Size of char %lu\n", sizeof(char));
   // strcpy(output, vec[0]);
   // strcat(output, " ");
-
+  //
   // for (int i = 1; i < vec_size; i++) {
   //   strcat(output, vec[i]);
   //   strcat(output, " ");
   // }
 
-  return output;
+  //return output;
 }
 
 void handle_pipe(node_t* n){
   FILE* fpin;
   FILE* fpout;
+  print_tree(n);
 
   for (unsigned int i = 0; i < n->pipe.n_parts; i++) {
     char* argvec = argvec_concat(n->pipe.parts[i]->command.argv, n->pipe.parts[i]->command.argc);
-    if(n->pipe.parts[i]->type == NODE_COMMAND) {
-      fpin = popen(argvec, "w");
-      free(argvec);
-      pclose(fpin);
-    }
+    //if(n->pipe.parts[i]->type == NODE_COMMAND) {
+      //fpin = popen(argvec, "w");
+      //free(argvec);
+      //pclose(fpin);
+    //}
   }
 
-  // FILE* fpin = popen(n->pipe.parts[0]->command.program, "w");
+  // FILE* fpin = popen(n->pipe.parts[0] vec_s->command.program, "w");
   // FILE* fpout1 = popen(n->pipe.parts[0]->command.program, "r");
   // FILE* fpin2 = popen(n->pipe.parts[1]->command.program, "w");
   // fputs(n->pipe.parts[0]->command.argv[1], fpin1);
