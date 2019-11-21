@@ -102,6 +102,7 @@
 4	/etc/./initramfs-tools/hooks
 4	/etc/./initramfs-tools/conf.d
 68	/etc/./initramfs-tools
+24	/etc/./openal
 12	/etc/./cron.monthly
 24	/etc/./ld.so.conf.d
 8	/etc/./gdb
@@ -213,7 +214,7 @@ du: cannot read directory '/etc/./polkit-1/localauthority': Permission denied
 4	/etc/./security/namespace.d
 56	/etc/./security
 4	/etc/./opt
-8	/etc/./alternatives
+16	/etc/./alternatives
 416	/etc/./fonts/conf.avail
 28	/etc/./fonts/conf.d
 452	/etc/./fonts
@@ -224,9 +225,9 @@ du: cannot read directory '/etc/./polkit-1/localauthority': Permission denied
 4	/etc/./apt/preferences.d
 76	/etc/./apt/apt.conf.d
 24	/etc/./apt/trusted.gpg.d
-20	/etc/./apt/sources.list.d
+28	/etc/./apt/sources.list.d
 4	/etc/./apt/auth.conf.d
-156	/etc/./apt
+168	/etc/./apt
 4	/etc/./gss/mech.d
 8	/etc/./gss
 12	/etc/./vim
@@ -331,4 +332,4 @@ du: cannot read directory '/etc/./ssl/private': Permission denied
 8	/etc/./logcheck/ignore.d.paranoid
 28	/etc/./logcheck
 8	/etc/./terminfo
-12592	/etc/.
+12648	/etc/.

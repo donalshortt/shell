@@ -16,7 +16,9 @@ void handle_cmd(node_t*);
 
 void handle_seq(node_t*);
 
-//void handle_pipe(node_t*);
+void handle_pipe(node_t*);
+
+void handle_subshell(node_t*);
 
 void do_nothing_signal_handler(){ return; }
 
@@ -30,7 +32,8 @@ void initialize(void){
 void run_command(node_t* node)
 {
   /* For testing: */
-  //print_tree(node);
+  // print_tree(node);
+  // printf("<--->\n");
 
   if (prompt)
       prompt = "vush$ ";
@@ -43,28 +46,28 @@ void run_command(node_t* node)
       handle_seq(node);
       break;
     case NODE_PIPE:
-      //handle_pipe(node);
+      handle_pipe(node);
       break;
     case NODE_DETACH:
-      // run_command(node->detach.child);
+      //run_command(node->detach.child);
       break;
     case NODE_REDIRECT:
       break;
     case NODE_SUBSHELL:
-      pid_t subshell = fork();
-
-      if (subshell == 0) {
-          run_command(node->subshell.child);
-      }
-      if ()
+      handle_subshell(node);
       break;
   }
 }
 
 _Bool handle_builtin_cmd(node_t* n){
   if (strcmp(n->command.program, "exit") == 0) {
+    if (n->command.argc > 1){
+      exit(atoi(n->command.argv[1]));
+    }
     exit(42);
   } else if (strcmp(n->command.program, "cd") == 0) {
+    // printf("<!>Directory changed<!>\n");
+    // printf("<!>PID: %d\n", getpid());
     chdir(n->command.argv[1]);
     return TRUE;
   }
@@ -72,53 +75,60 @@ _Bool handle_builtin_cmd(node_t* n){
 }
 
 void handle_cmd(node_t* n){
-    if (handle_builtin_cmd(n)) { return; }
+  if (handle_builtin_cmd(n)) { return; }
 
-    int status;
-    pid_t proc_id = fork();
+  int status;
+  pid_t proc_id = fork();
 
-    if (proc_id == 0) {
-        if (execvp(n->command.program, n->command.argv) == -1){
-          perror("No such file or directory");
-          return;
-        exit(0);
-    } else do {
-       if ((proc_id = waitpid(proc_id, &status, WNOHANG)) == 0){
-         sleep(.5);
-       }
-    } while (proc_id == 0);
+  if (proc_id == 0) {
+    // printf("<!>Command execution<!>\n");
+    // printf("<!>PID: %d\n", getpid());
+    if (execvp(n->command.program, n->command.argv) == -1){
+      perror("No such file or directory");
+      return;
+    }
+    exit(0);
+  } else {
+    waitpid(proc_id, &status, 0);
   }
 }
 
 void handle_seq(node_t* n){
-  handle_cmd(n->sequence.first);
+  run_command(n->sequence.first);
 
   if (n->sequence.second->type == NODE_COMMAND) {
-    handle_cmd(n->sequence.second);
+    run_command(n->sequence.second);
   } else {
     handle_seq(n->sequence.second);
   }
 }
 
-//void handle_pipe(node_t* n){
-  //FILE* fpin;
-  //FILE* fpout;
-  //print_tree(n);
+void handle_pipe(node_t* n){
+  int pipe_ends[2];
+  pipe(pipe_ends);
 
-  // for (unsigned int i = 0; i < n->pipe.n_parts; i++) {
-  //   //if(n->pipe.parts[i]->type == NODE_COMMAND) {
-  //     //fpin = popen(argvec, "w");
-  //     //free(argvec);
-  //     //pclose(fpin);
-  //   //}
-  // }
+  pid_t child_pid = fork();
 
-  // FILE* fpin = popen(n->pipe.parts[0] vec_s->command.program, "w");
-  // FILE* fpout1 = popen(n->pipe.parts[0]->command.program, "r");
-  // FILE* fpin2 = popen(n->pipe.parts[1]->command.program, "w");
-  // fputs(n->pipe.parts[0]->command.argv[1], fpin1);
-  // splice(fpout1, NULL, fpin2, NULL);
-  // pclose(fpin1);
-  // pclose(fpin2);
-  // pclose(fpout1);
-//}
+  if(child_pid == 0){
+    dup2(pipe_ends[1], STDOUT_FILENO);
+    close(pipe_ends[1]);
+    run_command(n->pipe.parts[0]);
+    abort();
+  } else {
+    dup2(pipe_ends[0], STDIN_FILENO);
+    close(pipe_ends[1]);
+    run_command(n->pipe.parts[1]);
+  }
+}
+
+void handle_subshell(node_t* n){
+  int status;
+  pid_t subshell = fork();
+
+  if (subshell == 0) {
+    run_command(n->subshell.child);
+    exit(0);
+  } else {
+    waitpid(subshell, &status, 0);
+  }
+}
