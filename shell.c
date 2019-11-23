@@ -104,21 +104,23 @@ void handle_seq(node_t* n){
 }
 
 void handle_pipe(node_t* n){
-  int pipe_ends[2];
-  pipe(pipe_ends);
+  unsigned int i;
+  for (i = 0; i < (n->pipe.n_parts - 1); i++) {
+    int pipe_ends[2];
+    pipe(pipe_ends);
 
-  pid_t child_pid = fork();
+    pid_t child_pid = fork();
 
-  if(child_pid == 0){
-    dup2(pipe_ends[1], STDOUT_FILENO);
-    close(pipe_ends[1]);
-    run_command(n->pipe.parts[0]);
-    abort();
-  } else {
+    if(child_pid == 0){
+      dup2(pipe_ends[1], STDOUT_FILENO);
+      close(pipe_ends[1]);
+      run_command(n->pipe.parts[i]);
+      exit(0);
+    }
     dup2(pipe_ends[0], STDIN_FILENO);
     close(pipe_ends[1]);
-    run_command(n->pipe.parts[1]);
   }
+  run_command(n->pipe.parts[i]);
 }
 
 void handle_subshell(node_t* n){
